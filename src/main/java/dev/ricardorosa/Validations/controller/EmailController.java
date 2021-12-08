@@ -76,7 +76,9 @@ public class EmailController {
 	EmailDTO toEmailDTO(Email email) {
 		EmailDTO dto = new EmailDTO();
 		dto.setAddress(email.getAddress());
-		dto.setUser(email.getUser().getName());
+		dto.setGbCapacity(email.getGbCapacity());
+		dto.setDomain(email.getDomain());
+		dto.setUser(email.getUser().getFirstName());
 		
 		return dto;
 	}

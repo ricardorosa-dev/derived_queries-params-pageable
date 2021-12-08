@@ -1,5 +1,6 @@
 package dev.ricardorosa.Validations.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,10 @@ public class Email {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String address;
+	private String password;
+	@Column(name = "gb_capacity")
+	private int gbCapacity;
+	private String domain;
 	
 	@ManyToOne
 	@JoinColumn(

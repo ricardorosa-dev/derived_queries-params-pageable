@@ -26,8 +26,14 @@ public class UserJsonDeserializer extends JsonDeserializer<User>{
 		JsonNode root = codec.readTree(p);
 		
 		User user = new User();
-		if (root.get("name") != null) {
-			user.setName(root.get("name").asText());
+		if (root.get("firstName") != null) {
+			user.setFirstName(root.get("firstName").asText());
+		}
+		if (root.get("lastName") != null) {
+			user.setLastName(root.get("lastName").asText());
+		}
+		if (root.get("active") != null) {
+			user.setActive(root.get("active").asBoolean());
 		}
 
 		if (root.get("dateOfBirth") != null) {

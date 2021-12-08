@@ -37,12 +37,21 @@ public class EmailJsonDeserializer extends JsonDeserializer<Email>{
 		if (root.get("address") != null) {
 			email.setAddress(root.get("address").asText());
 		}
+		if (root.get("password") != null) {
+			email.setPassword(root.get("password").asText());
+		}
+		if (root.get("gbCapacity") != null) {
+			email.setGbCapacity(root.get("gbCapacity").asInt());
+		}
+		if (root.get("domain") != null) {
+			email.setDomain(root.get("domain").asText());
+		}
 		
 		if (root.get("user") != null) {
 			String userName = root.get("user").asText();
 			
-			User incomingUser = userRepository.findByName(userName)
-					.orElseThrow(() -> new NotFoundException("user", "name", userName));
+			User incomingUser = userRepository.findByFirstName(userName)
+					.orElseThrow(() -> new NotFoundException("user", "firstName", userName));
 			email.setUser(incomingUser);
 		}
 		

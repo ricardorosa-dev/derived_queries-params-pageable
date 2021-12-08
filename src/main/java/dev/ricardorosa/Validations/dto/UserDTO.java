@@ -1,6 +1,5 @@
 package dev.ricardorosa.Validations.dto;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
 	
-	private String name;
+	private String firstName;
+	private String lastName;
+	private Boolean active;
 	private String dateOfBirth;
 	private List<String> emails;
 

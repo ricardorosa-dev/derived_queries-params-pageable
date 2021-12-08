@@ -34,30 +34,37 @@ public class UserService {
 	}
 	
 	public User save(User newUser) {
-		if (newUser.getName() == null
+		if (newUser.getFirstName() == null
+			|| newUser.getLastName() == null
+			|| newUser.getActive() == null
 			|| newUser.getDateOfBirth() == null) {
-			throw new IncompleteBodyException("user", "'name' and 'dateOfBirth'");
+			throw new IncompleteBodyException("user", "'firstName', 'lastName', 'active' and 'dateOfBirth'");
 		}
 		
-		User exists = repository.findByName(newUser.getName()).orElse(null);
+		User exists = repository.findByFirstName(newUser.getFirstName()).orElse(null);
 		
 		if (exists != null) {
-			throw new AlreadyExistsException("user", "name", exists.getName());
+			String fullName = exists.getFirstName() + " " + exists.getLastName();
+			throw new AlreadyExistsException("user", "name", fullName);
 		}
 		
 		return repository.save(newUser);
 	}
 		
 	public User update(Long id, User updateUser) {
-		if (updateUser.getName() == null
-				|| updateUser.getDateOfBirth() == null) {
-				throw new IncompleteBodyException("user", "'name' and 'dateOfBirth'");
-			}
+		if (updateUser.getFirstName() == null
+			|| updateUser.getLastName() == null
+			|| updateUser.getActive() == null
+			|| updateUser.getDateOfBirth() == null) {
+			throw new IncompleteBodyException("user", "'firstName', 'lastName', 'active' and 'dateOfBirth'");
+		}
 		
 		User foundUser = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("user", "id", id.toString()));
 		
-		foundUser.setName(updateUser.getName());
+		foundUser.setFirstName(updateUser.getFirstName());
+		foundUser.setLastName(updateUser.getLastName());
+		foundUser.setActive(updateUser.getActive());
 		foundUser.setDateOfBirth(updateUser.getDateOfBirth());
 		
 		return repository.save(foundUser);
@@ -66,7 +73,6 @@ public class UserService {
 	public void delete(Long id) {
 		User foundBand = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("user", "id", id.toString()));
-//		System.out.println(foundBand);
 		
 		repository.delete(foundBand);
 	}

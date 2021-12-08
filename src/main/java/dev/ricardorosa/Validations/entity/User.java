@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import dev.ricardorosa.Validations.jackson.UserJsonDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -32,18 +33,22 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	@Column(name = "first_name")
+	private String firstName;
+	@Column(name = "last_name")
+	private String lastName;
+	private Boolean active;
+	
 	@Column(name = "date_of_birth")
 	private LocalDate DateOfBirth;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Email> emails;
-
 	
 	@Override
 	public String toString() {
 		return "User [id=" + id + 
-				", name=" + name + 
+				", name=" + firstName + 
 				", DateOfBirth=" + DateOfBirth + 
 				", emails=" + emails + "]";
 	}

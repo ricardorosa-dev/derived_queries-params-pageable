@@ -37,8 +37,11 @@ private final EmailRepository repository;
 	
 	public Email save(Email newEmail) {
 		if (newEmail.getAddress() == null
+			|| newEmail.getPassword() == null
+			|| newEmail.getGbCapacity() == 0
+			|| newEmail.getDomain() == null
 			|| newEmail.getUser() == null) {
-			throw new IncompleteBodyException("email", "'address' and 'user'");
+			throw new IncompleteBodyException("email", "'address', 'password', 'gbCapacity', 'domain' and 'user'");
 		}
 		
 		Pattern emailPattern = Pattern.compile(
@@ -59,14 +62,20 @@ private final EmailRepository repository;
 		
 	public Email update(Long id, Email updateEmail) {
 		if (updateEmail.getAddress() == null
+			|| updateEmail.getPassword() == null
+			|| updateEmail.getGbCapacity() == 0
+			|| updateEmail.getDomain() == null
 			|| updateEmail.getUser() == null) {
-			throw new IncompleteBodyException("email", "'address' and 'user'");
+			throw new IncompleteBodyException("email", "'address', 'password', 'gbCapacity', 'domain' and 'user'");
 		}
 		
 		Email foundEmail = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("email", "id", id.toString()));
 		
 		foundEmail.setAddress(updateEmail.getAddress());
+		foundEmail.setPassword(updateEmail.getPassword());
+		foundEmail.setGbCapacity(updateEmail.getGbCapacity());
+		foundEmail.setDomain(updateEmail.getDomain());
 		foundEmail.setUser(updateEmail.getUser());
 		
 		return repository.save(foundEmail);

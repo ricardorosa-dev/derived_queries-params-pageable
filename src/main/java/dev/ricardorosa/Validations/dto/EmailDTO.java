@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class EmailDTO {
 	
 	private String address;
+	private int gbCapacity;
+	private String domain;
 	private String user;
 
 }

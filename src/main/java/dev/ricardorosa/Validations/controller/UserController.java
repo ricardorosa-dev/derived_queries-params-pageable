@@ -76,7 +76,9 @@ public class UserController {
 	
 	private UserDTO toUserDTO(User user) {
 		UserDTO dto = new UserDTO();
-		dto.setName(user.getName());
+		dto.setFirstName(user.getFirstName());
+		dto.setLastName(user.getLastName());
+		dto.setActive(user.getActive());
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		dto.setDateOfBirth(user.getDateOfBirth().format(formatter));
