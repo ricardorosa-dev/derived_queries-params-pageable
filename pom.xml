@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.ricardorosa</groupId>
-	<artifactId>DTO-Jackson</artifactId>
+	<artifactId>Params</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>DTO-Jackson</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Params</name>
+	<description>Projeto para um tutorial de Validações no Service, Exceções e ResponseEntity em Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
