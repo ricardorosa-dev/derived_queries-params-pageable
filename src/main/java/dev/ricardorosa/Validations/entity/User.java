@@ -33,10 +33,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "first_name")
-	private String firstName;
-	@Column(name = "last_name")
-	private String lastName;
+	private String name;
 	private Boolean active;
 	
 	@Column(name = "date_of_birth")
@@ -48,7 +45,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + 
-				", name=" + firstName + 
+				", name=" + name + 
 				", DateOfBirth=" + DateOfBirth + 
 				", emails=" + emails + "]";
 	}

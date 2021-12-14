@@ -1,12 +1,13 @@
 package dev.ricardorosa.Validations.controller;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,12 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.ricardorosa.Validations.dto.UserDTO;
 import dev.ricardorosa.Validations.entity.Email;
 import dev.ricardorosa.Validations.entity.User;
-import dev.ricardorosa.Validations.repository.UserRepository;
 import dev.ricardorosa.Validations.service.UserService;
 
 @RestController
@@ -74,10 +75,46 @@ public class UserController {
 		return new ResponseEntity<String>("User deleted.", HttpStatus.NO_CONTENT);
 	}
 	
+	@GetMapping("/name/{name}")
+	public UserDTO findByName(@PathVariable("name") String name) {
+		return this.toUserDTO(service.findByName(name));
+	}
+	
+	@GetMapping("/namecontaining/{name}")
+	public List<UserDTO> findByNameContaining(@PathVariable("name") String name) {
+		return service.findByNameContaining(name).stream()
+				.map(this::toUserDTO)
+				.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/filter")
+	public List<UserDTO> findByEmailAddress(
+			@RequestParam("active") Boolean active, 
+			Pageable pageable) {
+		Page<User> page = service.findByActive(active, pageable);
+		
+		return page.getContent().stream()
+				.map(this::toUserDTO)
+				.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/starting/{prefix}")
+	public List<UserDTO> findByNameStartingWith(@PathVariable("prefix") String prefix) {
+		return service.findByNameStartingWith(prefix).stream()
+				.map(this::toUserDTO)
+				.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/ending/{suffix}")
+	public List<UserDTO> findByNameEndingWith(@PathVariable("suffix") String suffix) {
+		return service.findByNameEndingWith(suffix).stream()
+				.map(this::toUserDTO)
+				.collect(Collectors.toList());
+	}
+	
 	private UserDTO toUserDTO(User user) {
 		UserDTO dto = new UserDTO();
-		dto.setFirstName(user.getFirstName());
-		dto.setLastName(user.getLastName());
+		dto.setName(user.getName());
 		dto.setActive(user.getActive());
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

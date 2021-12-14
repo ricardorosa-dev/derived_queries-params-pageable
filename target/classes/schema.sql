@@ -1,7 +1,6 @@
 CREATE TABLE user (
 	id INTEGER PRIMARY KEY, 
 	first_name VARCHAR(100) NOT NULL,
-	last_name VARCHAR (100) NOT NULL,
 	active BOOLEAN NOT NULL);
 
 CREATE TABLE email (

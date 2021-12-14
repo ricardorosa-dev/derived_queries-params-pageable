@@ -1,12 +1,12 @@
 package dev.ricardorosa.Validations.service;
 
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import dev.ricardorosa.Validations.entity.User;
 import dev.ricardorosa.Validations.exceptions.AlreadyExistsException;
@@ -34,36 +34,32 @@ public class UserService {
 	}
 	
 	public User save(User newUser) {
-		if (newUser.getFirstName() == null
-			|| newUser.getLastName() == null
+		if (newUser.getName() == null
 			|| newUser.getActive() == null
 			|| newUser.getDateOfBirth() == null) {
-			throw new IncompleteBodyException("user", "'firstName', 'lastName', 'active' and 'dateOfBirth'");
+			throw new IncompleteBodyException("user", "'name', 'active' and 'dateOfBirth'");
 		}
 		
-		User exists = repository.findByFirstName(newUser.getFirstName()).orElse(null);
+		User exists = repository.findByName(newUser.getName());
 		
 		if (exists != null) {
-			String fullName = exists.getFirstName() + " " + exists.getLastName();
-			throw new AlreadyExistsException("user", "name", fullName);
+			throw new AlreadyExistsException("user", "name", exists.getName());
 		}
 		
 		return repository.save(newUser);
 	}
 		
 	public User update(Long id, User updateUser) {
-		if (updateUser.getFirstName() == null
-			|| updateUser.getLastName() == null
+		if (updateUser.getName() == null
 			|| updateUser.getActive() == null
 			|| updateUser.getDateOfBirth() == null) {
-			throw new IncompleteBodyException("user", "'firstName', 'lastName', 'active' and 'dateOfBirth'");
+			throw new IncompleteBodyException("user", "'name', 'active' and 'dateOfBirth'");
 		}
 		
 		User foundUser = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("user", "id", id.toString()));
 		
-		foundUser.setFirstName(updateUser.getFirstName());
-		foundUser.setLastName(updateUser.getLastName());
+		foundUser.setName(updateUser.getName());
 		foundUser.setActive(updateUser.getActive());
 		foundUser.setDateOfBirth(updateUser.getDateOfBirth());
 		
@@ -75,6 +71,26 @@ public class UserService {
 				.orElseThrow(() -> new NotFoundException("user", "id", id.toString()));
 		
 		repository.delete(foundBand);
+	}
+	
+	public Page<User> findByActive(Boolean active, Pageable pageable) {
+		return repository.findByActive(active, pageable);
+	}
+	
+	public User findByName(String name) {
+		return repository.findByName(name);
+	}
+	
+	public List<User> findByNameContaining(String name) {
+		return repository.findByNameContaining(name);
+	}
+	
+	public List<User> findByNameStartingWith(String prefix) {
+		return repository.findByNameStartingWith(prefix);
+	}
+	
+	public List<User> findByNameEndingWith(String suffix) {
+		return repository.findByNameEndingWith(suffix);
 	}
 
 }

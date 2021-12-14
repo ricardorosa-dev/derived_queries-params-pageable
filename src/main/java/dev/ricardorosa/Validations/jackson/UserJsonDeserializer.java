@@ -27,10 +27,7 @@ public class UserJsonDeserializer extends JsonDeserializer<User>{
 		
 		User user = new User();
 		if (root.get("firstName") != null) {
-			user.setFirstName(root.get("firstName").asText());
-		}
-		if (root.get("lastName") != null) {
-			user.setLastName(root.get("lastName").asText());
+			user.setName(root.get("name").asText());
 		}
 		if (root.get("active") != null) {
 			user.setActive(root.get("active").asBoolean());

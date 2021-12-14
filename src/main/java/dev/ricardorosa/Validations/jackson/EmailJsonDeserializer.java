@@ -50,8 +50,11 @@ public class EmailJsonDeserializer extends JsonDeserializer<Email>{
 		if (root.get("user") != null) {
 			String userName = root.get("user").asText();
 			
-			User incomingUser = userRepository.findByFirstName(userName)
-					.orElseThrow(() -> new NotFoundException("user", "firstName", userName));
+			User incomingUser = userRepository.findByName(userName);
+			if (incomingUser == null) {
+				throw new NotFoundException("user", "firstName", userName);
+			}
+			
 			email.setUser(incomingUser);
 		}
 		

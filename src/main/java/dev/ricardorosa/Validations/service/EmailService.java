@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.ricardorosa.Validations.entity.Email;
-import dev.ricardorosa.Validations.entity.User;
 import dev.ricardorosa.Validations.exceptions.AlreadyExistsException;
 import dev.ricardorosa.Validations.exceptions.IncompleteBodyException;
 import dev.ricardorosa.Validations.exceptions.NotFoundException;
 import dev.ricardorosa.Validations.exceptions.WrongEmailFormatException;
 import dev.ricardorosa.Validations.repository.EmailRepository;
-import dev.ricardorosa.Validations.repository.UserRepository;
 
 @Service
 public class EmailService {
@@ -45,14 +43,14 @@ private final EmailRepository repository;
 		}
 		
 		Pattern emailPattern = Pattern.compile(
-				".+@.+\\.[a-z0-9]{2,4}(\\.[a-z0-9]{2,3})?", 
+				"[\\w]+@[\\w]+.[\\w]{2,4}(.[\\w]{2,3})?", 
 				Pattern.CASE_INSENSITIVE);
 		Matcher emailMatcher = emailPattern.matcher(newEmail.getAddress());
 		if (emailMatcher.find() == false) {
 			throw new WrongEmailFormatException();
 		}
 		
-		Email exists = repository.findByAddress(newEmail.getAddress());
+		Email exists = repository.findByAddress(newEmail.getAddress()).orElse(null);
 		if (exists != null) {
 			throw new AlreadyExistsException("email", "address", exists.getAddress());
 		}
@@ -86,6 +84,47 @@ private final EmailRepository repository;
 				.orElseThrow(() -> new NotFoundException("email", "id", id.toString()));
 		
 		repository.delete(foundEmail);
+	}
+	
+	public List<Email> findByAddressContaining(String address) {
+		return repository.findByAddressContaining(address);
+	}
+	
+	public List<Email> findByUserName(String userName) {
+		return repository.findByUserName(userName);
+	}
+	
+	public List<Email> findByUserNameNot(String userName) {
+		return repository.findByUserNameNot(userName);
+	}
+	
+	public Email findTop3ByGbCapacity() {
+		return repository.findTopByOrderByGbCapacity();
+	}
+	
+	public List<Email> findByOrderByGbCapacity() {
+		return repository.findTop2ByOrderByGbCapacityDesc();
+	}
+	
+	public List<Email> findByActiveTrue() {
+		return repository.findByUserActiveTrue();
+	}
+	
+	public List<Email> findByAddressOrUserName(String address, String userName) {
+		return repository.findByAddressOrUserName(address, userName);
+	}
+	
+	public List<Email> findByAddressLike(String address, String domain) {
+		String likePattern = address + "%@%" + domain; 
+		return repository.findByAddressLike(likePattern);
+	}
+	
+	public List<Email> getByManyIds(List<Long> ids) {
+		return repository.getByManyIds(ids);
+	}
+	
+	public List<Email> findByAddressOrDomain(String address, String domain) {
+		return repository.findByAddressOrDomain(address, domain);
 	}
 
 }

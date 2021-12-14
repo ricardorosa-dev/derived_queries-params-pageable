@@ -1,6 +1,6 @@
 package dev.ricardorosa.Validations.dto;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class JoinDTO {
 	
 	private String name;
-	private Boolean active;
-	private String dateOfBirth;
-	private List<String> emails;
+	private LocalDate dateOfBirth;
+	private String address;
+	private String domain;
 
 }
